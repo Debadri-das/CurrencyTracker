@@ -26,18 +26,30 @@ async function convert() {
   const to = document.getElementById("to").value;
 
   try {
+    // NOTE: Base is always EUR for free plan
     const response = await fetch(`${API_URL}&symbols=${from},${to}`);
     const data = await response.json();
 
     if (data.success) {
-      const rateFrom = data.rates[from];
-      const rateTo = data.rates[to];
+      const rates = data.rates;
 
-      const converted = (amount / rateFrom) * rateTo;
+      // Conversion logic assuming base is always EUR
+      let convertedAmount;
+      if (from === "EUR") {
+        convertedAmount = amount * rates[to]; // EUR → target
+      } else if (to === "EUR") {
+        convertedAmount = amount / rates[from]; // from → EUR
+      } else {
+        // from → EUR → to
+        const amountInEUR = amount / rates[from];
+        convertedAmount = amountInEUR * rates[to];
+      }
+
       document.getElementById("result").textContent =
-        `${amount} ${from} = ${converted.toFixed(2)} ${to}`;
+        `${amount} ${from} = ${convertedAmount.toFixed(2)} ${to}`;
     } else {
-      document.getElementById("result").textContent = "Failed to fetch exchange rates.";
+      document.getElementById("result").textContent =
+        "Failed to fetch exchange rates: " + (data.error?.info || "Unknown error");
     }
   } catch (error) {
     document.getElementById("result").textContent = "Error: " + error.message;
