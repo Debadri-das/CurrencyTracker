@@ -1,7 +1,7 @@
 const currencySelects = ["from", "to"];
 const currencies = ["USD", "EUR", "INR", "GBP", "JPY", "CAD"];
 
-const API_KEY = "A3LPpHgcsNwexG51Ltkyh0ka3fEjoTX3EY";
+const API_KEY = "A3A3LPpHgcsNwexG51Ltkyh0ka3fEjoTX3";
 const API_URL = `https://data.fixer.io/api/latest?access_key=${API_KEY}`;
 
 window.onload = () => {
